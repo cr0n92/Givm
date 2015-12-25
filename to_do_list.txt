@@ -1,0 +1,30 @@
+GIVMED TO DO LIST:
+------------------
+
+-ao	 GitHub na to ma8oume
+-a	 Epanaxrhsimopoihsh kwdika
+-o	 Login me username kai password (alliws me pin argotera)
+-a	 Ta strings sta agglika
+-a	 Provlhmata me pisw kai auta
+
+
+-o	 Django 8emata twn vasewn me foreign keys kai ON_CASCADE (pou xreiazetai kai pou oxi, analysh periptwsewn)
+-o	 Queries kai urls gia ola
+-a	 Queries sto api tou gallinou
+
+
+
+Argotera alla oxi polu argotera:
+--------------------------------
+-o	 O8ones gia ola ta kinita
+-	 Na vroume server kai na xwsoume ta dika mas ekei
+-	 Anagnwrish pshfiwn kai times
+
+
+SXOLH TO DO LIST:
+-----------------
+
+- Parallhla 3	8/1
+- Kryptografia 	8/1
+- Sxedio
+
