@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import java.lang.reflect.Field;
@@ -21,11 +22,17 @@ public class HelperActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
 
-    public void helperOnCreate(int activityLayout, boolean has_arrow) {
-        setContentView(activityLayout);
+    public int myMenu;
+
+    public void setMenu(int myMenu) {
+        this.myMenu = myMenu;
+    }
+
+    public void helperOnCreate(int activityXML, String title, boolean has_arrow) {
+        setContentView(activityXML);
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
-        mToolBar.setTitle("Εισαγωγή");
+        mToolBar.setTitle(title);
         mToolBar.setNavigationIcon(R.drawable.ic_arrows);
         setSupportActionBar(mToolBar);
 
@@ -46,9 +53,9 @@ public class HelperActivity extends AppCompatActivity
             // You can set it even to the value you want like mEdgeSize.setInt(draggerObj, 150); for 150dp
 
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                    this, drawer, (has_arrow) ? mToolBar : null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.setDrawerListener(toggle);
-            toggle.setDrawerIndicatorEnabled(false);
+            toggle.setDrawerIndicatorEnabled(!has_arrow);
             toggle.syncState();
 
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -64,26 +71,52 @@ public class HelperActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(this.myMenu, menu);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        String class_name = this.getClass().getSimpleName();
+        boolean started = false;
 
-        if (id == R.id.nav_personal_pharmacy) {
+        if (id == R.id.nav_personal_pharmacy && !class_name.equals("Farmakeio")) {
             startActivity(new Intent(getApplicationContext(), Farmakeio.class));
-        } else if (id == R.id.nav_register_med) {
-            if (!this.getClass().getSimpleName().equals("TwoButtons"))
-                startActivity(new Intent(getApplicationContext(), TwoButtons.class));
-        } else if (id == R.id.nav_needs) {
-
-        } else if (id == R.id.nav_donations) {
+            started = true;
+        } else if (id == R.id.nav_register_med && !class_name.equals("TwoButtons")) {
+            startActivity(new Intent(getApplicationContext(), TwoButtons.class));
+            started = true;
+        } else if (id == R.id.nav_needs && !class_name.equals("Elleipseis")) {
+            startActivity(new Intent(getApplicationContext(), Elleipseis.class));
+        } else if (id == R.id.nav_donations && !class_name.equals("Donations")) {
             //startActivity(new Intent(getApplicationContext(), Donations.class));
-        } else if (id == R.id.nav_profile) {
+            //started = true;
+        } else if (id == R.id.nav_profile && !class_name.equals("Profile")) {
             //startActivity(new Intent(getApplicationContext(), Profile.class));
-        } else if (id == R.id.nav_communication) {
+            //started = true;
+        } else if (id == R.id.nav_communication && !class_name.equals("Communication")) {
             //startActivity(new Intent(getApplicationContext(), Communication.class));
-        } else if (id == R.id.nav_share) {
+            //started = true;
+        } else if (id == R.id.nav_share && !class_name.equals("Share")) {
             //startActivity(new Intent(getApplicationContext(), Share.class));
+            //started = true;
         }
+
+        if (started && !class_name.equals("Elleipseis"))
+            finish();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
