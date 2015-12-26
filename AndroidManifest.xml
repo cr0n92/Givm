@@ -26,7 +26,6 @@
             android:label="inputter"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
-
         <activity
             android:name=".Giver"
             android:label="giver"

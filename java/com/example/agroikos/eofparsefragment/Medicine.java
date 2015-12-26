@@ -69,7 +69,7 @@ public class Medicine {
     // package them for transport in an Intent
 
     public static void packageIntent(Intent intent, String title,
-                                     Integer quantity, String date) {
+                                     String quantity, String date) {
 
         intent.putExtra(Medicine.TITLE, title);
         intent.putExtra(Medicine.QUANTITY, quantity);

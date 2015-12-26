@@ -55,13 +55,21 @@ public class Outputer extends HelperActivity {
             else {
                 mEditText3.setError(null);
 
-                Integer quantity = Integer.parseInt(mEditText3.getText().toString());
-                Farmakeio.newMed = new Medicine(sclearName, date, quantity);
+                String quantity = (String) (mEditText3.getText().toString());
+                //Farmakeio.newMed = new Medicine(sclearName, date, quantity);
 
-                Farmakeio.mAdapter.add(Farmakeio.newMed);
+
+
+                //Farmakeio.mAdapter.add(Farmakeio.newMed);
 
                 Intent showItemIntent = new Intent(getApplicationContext(), Farmakeio.class);
+                Medicine.packageIntent(showItemIntent ,sclearName,quantity,date);
+
+                //If set, and the activity being launched is already running in the current task, then instead of
+                // launching a new instance of that activity, all of the other activities on top of it will be closed and
+                // this Intent will be delivered to the (now on top) old activity as a new Intent.
                 showItemIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                //If set, the activity will not be launched if it is already running at the top of the history stack.
                 showItemIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                 startActivity(showItemIntent);

@@ -16,17 +16,29 @@ public class Need {
     public final static String FILENAME = "filename";
 
 
-
+    int mID;
     private String mNeedMedName = new String();
     private String mNeedPhone = new String();
     private String mNeedAddress = new String();
 
 
-    Need() {
+    public Need() {
 
     }
 
-    // Create a new ToDoItem from data packaged in an Intent
+    public Need(int id, String needMedName, String needAddress,String needPhone){
+        this.mID = id;
+        this.mNeedMedName = needMedName;
+        this.mNeedAddress = needAddress;
+        this.mNeedPhone = needPhone;
+    }
+
+    // constructor
+    public Need(String needMedName, String needAddress,String needPhone){
+        this.mNeedMedName = needMedName;
+        this.mNeedAddress = needAddress;
+        this.mNeedPhone = needPhone;
+    }
 
     Need(Intent intent) {
 
@@ -35,6 +47,16 @@ public class Need {
         mNeedAddress = intent.getStringExtra(Need.NEED_ADDRESS);
 
 
+    }
+
+    // getting ID
+    public int getID(){
+        return this.mID;
+    }
+
+    // setting id
+    public void setID(int id){
+        this.mID = id;
     }
 
     public String getName() {

@@ -1,7 +1,6 @@
 package com.example.agroikos.eofparsefragment;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ParseException;
@@ -13,9 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -59,13 +56,23 @@ public class Farmakeio extends HelperActivity {
         registerForContextMenu(list);
         list.setAdapter(mAdapter);
     }
-
+    @Override
+    protected void onNewIntent (Intent intent){
+        if (intent.hasExtra("title")) {
+            setIntent(intent);
+        }
+    }
     @Override
     public void onResume() {
         super.onResume();
 
-        // Load saved ToDoItems, if necessary
-        Log.i("Activity :", "" + hashCode());
+        Log.e("Activity :", "" + hashCode());
+
+        Intent intent = getIntent();
+        if (intent.hasExtra("title")) {
+            newMed = new Medicine(intent);
+            mAdapter.add(newMed);
+        }
 
         //Log.i("Count :", "" + mAdapter.getCount());
 
@@ -84,7 +91,6 @@ public class Farmakeio extends HelperActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // TODO - Check result code and request code
         if (resultCode == RESULT_OK && requestCode == GIVER_REQUEST) {
             Integer posa = data.getIntExtra("posothta",-1);
             Integer pos = data.getIntExtra("thesh",-1);
