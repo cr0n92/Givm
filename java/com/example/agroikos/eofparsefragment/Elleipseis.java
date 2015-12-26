@@ -29,7 +29,7 @@ public class Elleipseis extends HelperActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setMenu(R.menu.menu_main_simple);
-        super.helperOnCreate(R.layout.eleipseis, "Eleipseis", false);
+        super.helperOnCreate(R.layout.eleipseis, R.string.elleipseis, false);
 
         mAdapter = new NeedAdapter(getApplicationContext());
         ListView list = (ListView)findViewById(R.id.list);

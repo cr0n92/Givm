@@ -26,7 +26,7 @@ public class HelperActivity extends AppCompatActivity
         this.myMenu = myMenu;
     }
 
-    public void helperOnCreate(int activityXML, String title, boolean has_arrow) {
+    public void helperOnCreate(int activityXML, int title, boolean has_arrow) {
         setContentView(activityXML);
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);

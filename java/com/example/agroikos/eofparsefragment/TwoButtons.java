@@ -17,7 +17,7 @@ public class TwoButtons extends HelperActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setMenu(R.menu.menu_main_simple);
-        super.helperOnCreate(R.layout.mainee, "Eisagwgh", true);
+        super.helperOnCreate(R.layout.mainee, R.string.two_buttons, true);
 
         final Button scanButton = (Button) findViewById(R.id.button1);
         scanButton.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +52,7 @@ public class TwoButtons extends HelperActivity
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult.getContents() != null) {
             String scanContent = scanningResult.getContents();
-            Intent showItemIntent = new Intent(getApplicationContext(), Outputer.class);
+            Intent showItemIntent = new Intent(getApplicationContext(), Inputter.class);
             showItemIntent.putExtra("data", scanContent);
             startActivity(showItemIntent);
         }
