@@ -1,4 +1,3 @@
-kaka
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.agroikos.eofparsefragment" >
@@ -39,7 +38,7 @@ kaka
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".Eleipseis"
+            android:name=".Elleipseis"
             android:label="eleipseis"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" >
