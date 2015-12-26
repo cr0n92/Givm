@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">GivMed</string>
 
+    <!-- Ονόματα των Activities στο Tool Bar -->
+    <string name="inputter">Εισαγωγή</string>
+    <string name="outputer">Καταχώρηση</string>
+    <string name="two_buttons">Επιλογή</string>
+    <string name="elleipseis">Ελλείψεις</string>
+
     <!-- Εγγραφή -->
     <string name="your_phone">Συμπλήρωσε τον αριθμό σου</string>
     <string name="accept_terms">Αποδέχομαι τους όρους</string>
