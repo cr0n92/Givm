@@ -39,7 +39,8 @@
         </activity>
         <activity
             android:name=".Elleipseis"
-            android:label="eleipseis"
+            android:label="elleipseis"
+            android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
