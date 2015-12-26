@@ -195,10 +195,10 @@ public class Inputter extends HelperActivity {
                 showItemIntent.putExtra("name", name);
                 showItemIntent.putExtra("date", date);
                 startActivity(showItemIntent);
-
-                dialog.dismiss();
-                dialog = null;
             }
+
+            dialog.dismiss();
+            dialog = null;
         }
 
         private String readStream(InputStream in) {

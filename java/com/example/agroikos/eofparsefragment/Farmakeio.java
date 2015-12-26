@@ -6,12 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ParseException;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -24,7 +27,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-public class Farmakeio extends ListActivity {
+public class Farmakeio extends HelperActivity {
 
     private static final int GIVER_REQUEST = 0;
     public static medAdapter mAdapter;
@@ -38,24 +41,23 @@ public class Farmakeio extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.setMenu(R.menu.menu_main_simple);
+        super.helperOnCreate(R.layout.pharmacy, R.string.farmakeio, true);
 
-        // Create a new TodoListAdapter for this ListActivity's ListView
-        mAdapter = new medAdapter(getApplicationContext());
-        getListView().setFooterDividersEnabled(true);
-
-        TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer_view, null);
-        getListView().addFooterView(footerView);
-        registerForContextMenu(getListView());
-
-        footerView.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionButton floatingBut = (FloatingActionButton) findViewById(R.id.fab);
+        floatingBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Farmakeio.this, TwoButtons.class));
             }
         });
 
-        // TODO - Attach the adapter to this ListActivity's ListView
-        getListView().setAdapter(mAdapter);
+        mAdapter = new medAdapter(getApplicationContext());
+
+        ListView list = (ListView)findViewById(R.id.list);
+        list.setFooterDividersEnabled(true);
+        registerForContextMenu(list);
+        list.setAdapter(mAdapter);
     }
 
     @Override
@@ -112,7 +114,7 @@ public class Farmakeio extends ListActivity {
         try {
             info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         } catch (ClassCastException e) {
-            Log.e("kaka", "bad menuInfo", e);
+            Log.e("farmakeio", "bad menuInfo", e);
             return;
         }
         long id = info.position;
@@ -124,7 +126,7 @@ public class Farmakeio extends ListActivity {
         try {
             info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         } catch (ClassCastException e) {
-            Log.e("kaka", "bad menuInfo", e);
+            Log.e("farmakeio", "bad menuInfo", e);
             return false;
 
         }
