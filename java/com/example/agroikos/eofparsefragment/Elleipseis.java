@@ -3,7 +3,6 @@ package com.example.agroikos.eofparsefragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -48,7 +47,7 @@ public class Elleipseis extends HelperActivity
 
         @Override
         protected JSONArray doInBackground(Void... arg0) {
-            String URL = "http://192.168.1.93:8000/needs/";
+            String URL = "http://192.168.1.2:8000/needs/";
             String data="";
             JSONArray out=null;
 
