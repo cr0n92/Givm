@@ -11,6 +11,7 @@ public class Need {
 
 
     public final static String NEED_NAME = "name";
+    public final static String NEED_ID = "id";
     public final static String NEED_PHONE = "phone";
     public final static String NEED_ADDRESS = "address";
     public final static String FILENAME = "filename";

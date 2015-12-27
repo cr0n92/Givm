@@ -1,6 +1,9 @@
 package com.example.agroikos.eofparsefragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -47,7 +50,7 @@ public class HelperActivity extends AppCompatActivity
 
             int edge = 0;
             edge = mEdgeSize.getInt(draggerObj);
-            mEdgeSize.setInt(draggerObj, edge * 5); //optimal value as for me, you may set any constant in dp
+            mEdgeSize.setInt(draggerObj, edge * 2); //optimal value as for me, you may set any constant in dp
             // You can set it even to the value you want like mEdgeSize.setInt(draggerObj, 150); for 150dp
 
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -120,4 +123,6 @@ public class HelperActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
