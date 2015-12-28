@@ -1,5 +1,8 @@
 package com.example.agroikos.eofparsefragment;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,11 +22,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.List;
 
 public class Elleipseis extends HelperActivity
 {
 
     public static NeedAdapter mAdapter;
+    NeedHandler db = new NeedHandler(this);
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +46,19 @@ public class Elleipseis extends HelperActivity
         new HttpGetTask().execute();
     }
 
+    //Gia na tsekaroume pio grhgora an prepei na paroume ta dedomena apo thn SQLite
+    //Alliws argei upervolika
+    //Allh enallaktikh:InetAddress.getByName(host).isReachable(timeOut)->den douleuei panta kala
+    //Isws timeout sto http connection
+    //http://stackoverflow.com/questions/1443166/android-how-to-check-if-the-server-is-available
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
     private class HttpGetTask extends AsyncTask<Void, Void, JSONArray> {
 
         private static final String TAG = "HttpGetTask";
@@ -47,9 +66,27 @@ public class Elleipseis extends HelperActivity
 
         @Override
         protected JSONArray doInBackground(Void... arg0) {
+
             String URL = "http://192.168.1.2:8000/needs/";
+
+
+
+
+
+
             String data="";
             JSONArray out=null;
+
+
+            if (isOnline()==false){
+                try {
+                    throw new IOException();
+                } catch (IOException e) {
+                    error = 1;
+                    e.printStackTrace();
+                    return out;
+                }
+            }
 
             String request = URL;
             java.net.URL url = null;
@@ -58,6 +95,10 @@ public class Elleipseis extends HelperActivity
             try {
                 url = new URL(request);
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
+
+                //conn.setConnectTimeout(10* 1000);          // 10 s.
+                //conn.connect();
+
                 conn.setDoInput(true);
 
                 InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
@@ -89,19 +130,40 @@ public class Elleipseis extends HelperActivity
             if (error > 0) {
                 Toast.makeText(getApplicationContext(), (error == 1)? "No internet connection" : "Nothing to show",
                         Toast.LENGTH_LONG).show();
+                //TODO na to ftiaksoume kalutera,kanei diplh douleia
+
+
+                List<Need> needs = db.getAllNeeds();
+                for (Need element : needs) {
+                    mAdapter.add(element);
+
+                }
+
+
+
             }
             else {
                 try {
                     // create apps list
                     //List<Application> apps = new ArrayList<Application>();
+                    db.deleteAll();
 
                     for(int i=0; i<result.length(); i++) {
                         JSONObject json = result.getJSONObject(i);
                         Need needo = new Need();
-
+                        needo.setID(json.getInt("id"));
                         needo.setName(json.getString("needMedName"));
                         needo.setPhone(json.getString("needPhone"));
                         needo.setAddress(json.getString("needAddress"));
+                        db.addNeed(new Need(json.getInt("id"),json.getString("needMedName"), json.getString("needPhone"), json.getString("needAddress")));
+
+                        List<Need> needs = db.getAllNeeds();
+
+                        for (Need cn : needs) {
+                            String log = "Id: "+cn.getID()+" ,Name: " + cn.getName()+",Address: " + cn.getAddress()+ " ,Phone: " + cn.getPhone();
+                            // Writing Contacts to log
+                            Log.d("Name: ", log);
+                        }
 
                         // add the app to apps list
                         mAdapter.add(needo);

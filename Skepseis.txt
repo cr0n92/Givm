@@ -1,0 +1,13 @@
+H SQLite vash twn Elleipsewn na enhmerwnetai mono otan o xrhsths exei internet kai h vash ston server exei allaksei:
+          To django den uposthrizei kati pou na deixnei pote allakse to model.To mono pou vrhka htane ta auto_now,auto_now_add
+          ta opoia uparxoun se kathe row opote gia na ta aksiopoihsoume prepei na kanoume sorting kai na paroume to antistoixo 
+          pedio apo to prwto row.Epishs tha prepe na metrame ta rows tou table Elleipseis gia na tsekaroume an exei ginei deletion
+          kapoiou row pou o xrhsths to xei akoma sthn SQLite.
+          To mySQL exei sto information_schema ena pedio pou legetai update_time kai isws mporei na mas kanei.
+          
+          
+          
+SMS AUTHENTICATION
+          Theloume Flash SMS?
+          
+          

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,7 @@ public class NeedHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.e("l","KAKAKAKAKAKA");
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACTS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT," + KEY_ADDR + " TEXT,"
                 + KEY_PH_NO + " TEXT" + ")";
@@ -63,6 +65,7 @@ public class NeedHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_ID, need.getID()); // Need ID
         values.put(KEY_NAME, need.getName()); // Need Name
         values.put(KEY_PH_NO, need.getPhone()); // Need Phone Number
         values.put(KEY_ADDR, need.getAddress()); // Need Address
@@ -78,13 +81,12 @@ public class NeedHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_CONTACTS, new String[] { KEY_ID,
-                        KEY_NAME, KEY_PH_NO }, KEY_ID + "=?",
+                        KEY_NAME, KEY_ADDR, KEY_PH_NO }, KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
-        Need need = new Need(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2),cursor.getString(3));
+        Need need = new Need(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2),cursor.getString(3));
         // return need
         return need;
     }
@@ -101,12 +103,13 @@ public class NeedHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                Need contact = new Need();
-                contact.setID(Integer.parseInt(cursor.getString(0)));
-                contact.setName(cursor.getString(1));
-                contact.setPhone(cursor.getString(2));
+                Need need = new Need();
+                need.setID(Integer.parseInt(cursor.getString(0)));
+                need.setName(cursor.getString(1));
+                need.setAddress(cursor.getString(2));
+                need.setPhone(cursor.getString(3));
                 // Adding contact to list
-                needList.add(contact);
+                needList.add(need);
             } while (cursor.moveToNext());
         }
 
@@ -135,14 +138,22 @@ public class NeedHandler extends SQLiteOpenHelper {
 
         // updating row
         return db.update(TABLE_CONTACTS, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(need.getID()) });
+                new String[]{String.valueOf(need.getID())});
     }
 
     // Deleting single contact
     public void deleteNeed(Need need) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CONTACTS, KEY_ID + " = ?",
-                new String[] { String.valueOf(need.getID()) });
+                new String[]{String.valueOf(need.getID())});
         db.close();
+    }
+
+    public void deleteAll() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
+
+        // Create tables again
+        onCreate(db);
     }
 }
