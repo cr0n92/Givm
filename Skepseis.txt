@@ -6,3 +6,8 @@ H SQLite vash twn Elleipsewn na enhmerwnetai mono otan o xrhsths exei internet k
           To mySQL exei sto information_schema ena pedio pou legetai update_time kai isws mporei na mas kanei.
           
           
+          
+SMS AUTHENTICATION
+          Theloume Flash SMS?
+          
+          
