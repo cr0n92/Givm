@@ -1,22 +1,23 @@
 GIVMED TO DO LIST:
 ------------------
 
--ao	 GitHub na to ma8oume
--a	 Epanaxrhsimopoihsh kwdika
--o	 Login me username kai password (alliws me pin argotera)
+-o	 SMS verification
+-a   othones gia eggrafh,login
 -a	 Ta strings sta agglika
--a	 Provlhmata me pisw kai auta
 
+-o	 Queries kai urls gia ola(pou xreiazetai ON_CASCADE?)
 
--o	 Django 8emata twn vasewn me foreign keys kai ON_CASCADE (pou xreiazetai kai pou oxi, analysh periptwsewn)
--o	 Queries kai urls gia ola
--a	 Queries sto api tou gallinou
+-    Share
+-    Deep Links
+-    google analytics
+-    
 
 
 
 Argotera alla oxi polu argotera:
 --------------------------------
--o	 O8ones gia ola ta kinita
+-	 Queries sto api tou gallinou -> perimenoume sunanthsh
+-o O8ones gia ola ta kinita
 -	 Na vroume server kai na xwsoume ta dika mas ekei
 -	 Anagnwrish pshfiwn kai times
 
