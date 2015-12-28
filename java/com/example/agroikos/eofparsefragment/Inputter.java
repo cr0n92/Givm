@@ -41,6 +41,7 @@ public class Inputter extends HelperActivity {
         super.helperOnCreate(R.layout.input_byhand, R.string.inputter, true);
 
         mEditText = (EditText) findViewById(R.id.edit1);
+
         Intent intent = getIntent();
         if (intent.hasExtra("data")) {
             mEditText.setText(intent.getStringExtra("data"));

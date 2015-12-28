@@ -7,6 +7,26 @@
     <string name="two_buttons">Επιλογή</string>
     <string name="elleipseis">Ελλείψεις</string>
     <string name="farmakeio">Φαρμακείο</string>
+    <string name="register">Eγγραφή</string>
+
+    <!-- Καταχώρηση -->
+    <string name="med_name">Όνομα Φαρμάκου</string>
+    <string name="pills_quantity">Ποσότητα χαπιών</string>
+    <string name="expiration_date">Ημ. λήξης</string>
+    <string name="pickup_address">Διεύθυνση παραλαβής</string>
+    <string name="condition">Συνθήκες συντήρησης</string>
+
+    <!-- Προφίλ -->
+    <string name="username">Όνομα χρήστη</string>
+    <string name="birth_date">Ημ. Γένησης</string>
+    <string name="male">Άντρας</string>
+    <string name="female">Γυναίκα</string>
+    <string name="phone">Τηλέφωνο</string>
+    <string name="email">Email</string>
+
+    <string name="err_msg_name">Enter your name</string>
+    <string name="err_msg_email">Enter valid email address</string>
+    <string name="err_msg_password">Enter the password</string>
 
     <!-- Εγγραφή -->
     <string name="your_phone">Συμπλήρωσε τον αριθμό σου</string>
@@ -18,21 +38,6 @@
 
     <!-- Αναζήτηση -->
     <string name="med_name_drastikh">Όνομα Φαρμάκου/Δραστική Ουσία</string>
-
-    <!-- Καταχώρηση -->
-    <string name="med_name">Όνομα Φαρμάκου</string>
-    <string name="pills_quantity">Ποσότητα χαπιών</string>
-    <string name="expiration_date">Ημ. λήξης</string>
-    <string name="pickup_address">Διεύθυνση παραλαβής</string>
-    <string name="condition">Συνθήκες συντήρησης</string>
-
-    <!-- Προφίλ -->
-    <string name="username">Όνομα χρήστη</string>
-    <string name="age">Ηλικία</string>
-    <string name="sex">Φύλλο</string>
-    <string name="phone">Τηλέφωνο</string>
-    <string name="email">Email</string>
-    <string name="area">Περιοχή</string>
 
     <!-- Επικοινωνία -->
     <string name="subject">Θέμα</string>
