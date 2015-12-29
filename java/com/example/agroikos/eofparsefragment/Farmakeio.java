@@ -62,23 +62,31 @@ public class Farmakeio extends HelperActivity {
         registerForContextMenu(list);
         list.setAdapter(mAdapter);
     }
+
     @Override
     protected void onNewIntent (Intent intent){
-        if (intent.hasExtra("title")) {
+        if (intent.hasExtra("outputter")) {
             setIntent(intent);
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
 
         Log.e("Activity :", "" + hashCode());
 
+        //edw pairnoume to intent ka8e fora, epeidh kaleite panta h onResume
+        //alla an einai hdh anoixto to Farmakeio.class tote prepei na valoume
+        //thn onNewIntent giati den evlepe to intent mesa sthn onResume
         Intent intent = getIntent();
-        if (intent.hasExtra("title")) {
-            Log.e("edw re", "poulis");
+        if (intent.hasExtra("outputter") && !intent.hasExtra("consumed")) {
             newMed = new Medicine(intent);
             mAdapter.add(newMed);
+
+            //otan paroume kai xrhsimopoihsoume to intent tote vazoume ena epipleon pedio
+            //gia na 3eroume oti den to xreiazomaste
+            intent.putExtra("consumed", true);
         }
 
         //Log.i("Count :", "" + mAdapter.getCount());
@@ -122,7 +130,7 @@ public class Farmakeio extends HelperActivity {
 
         menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, "Delete medicine");
         menu.add(Menu.NONE, MENU_GIVE, Menu.NONE, "Give Medicine");
-        menu.add(Menu.NONE, MENU_SHARE, Menu.NONE, "Share this medicine");
+        menu.add(Menu.NONE, MENU_SHARE, Menu.NONE, "Share Medicine");
 
         AdapterView.AdapterContextMenuInfo info;
         try {
@@ -144,8 +152,9 @@ public class Farmakeio extends HelperActivity {
             return false;
 
         }
-         final long id = info.position;
-            View medView=info.targetView;
+
+        final long id = info.position;
+        View medView=info.targetView;
 
         switch (item.getItemId()) {
             case MENU_DELETE:

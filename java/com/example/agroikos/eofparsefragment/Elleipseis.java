@@ -69,16 +69,10 @@ public class Elleipseis extends HelperActivity
 
             String URL = "http://192.168.1.2:8000/needs/";
 
+            String data = "";
+            JSONArray out = null;
 
-
-
-
-
-            String data="";
-            JSONArray out=null;
-
-
-            if (isOnline()==false){
+            if (!isOnline()){
                 try {
                     throw new IOException();
                 } catch (IOException e) {
@@ -132,15 +126,11 @@ public class Elleipseis extends HelperActivity
                         Toast.LENGTH_LONG).show();
                 //TODO na to ftiaksoume kalutera,kanei diplh douleia
 
-
                 List<Need> needs = db.getAllNeeds();
                 for (Need element : needs) {
                     mAdapter.add(element);
 
                 }
-
-
-
             }
             else {
                 try {
