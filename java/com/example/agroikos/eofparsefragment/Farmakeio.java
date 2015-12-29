@@ -1,8 +1,12 @@
 package com.example.agroikos.eofparsefragment;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.ParseException;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class Farmakeio extends HelperActivity {
 
@@ -34,6 +39,7 @@ public class Farmakeio extends HelperActivity {
     // IDs for menu items
     private static final int MENU_DELETE = Menu.FIRST;
     private static final int MENU_GIVE = Menu.FIRST + 1;
+    private static final int MENU_SHARE = Menu.FIRST + 2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +76,7 @@ public class Farmakeio extends HelperActivity {
 
         Intent intent = getIntent();
         if (intent.hasExtra("title")) {
+            Log.e("edw re", "poulis");
             newMed = new Medicine(intent);
             mAdapter.add(newMed);
         }
@@ -115,6 +122,7 @@ public class Farmakeio extends HelperActivity {
 
         menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, "Delete medicine");
         menu.add(Menu.NONE, MENU_GIVE, Menu.NONE, "Give Medicine");
+        menu.add(Menu.NONE, MENU_SHARE, Menu.NONE, "Share this medicine");
 
         AdapterView.AdapterContextMenuInfo info;
         try {
@@ -175,6 +183,12 @@ public class Farmakeio extends HelperActivity {
                 // Start the QuoteListActivity using Activity.startActivity()
                 GiverIntent.putExtra("Pos",id);;
                 startActivityForResult(GiverIntent,GIVER_REQUEST);
+                return true;
+            case MENU_SHARE:
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, "http://www.google.fr/");
+                startActivity(Intent.createChooser(intent, "Share with"));
                 return true;
             default:
                 return super.onContextItemSelected(item);
