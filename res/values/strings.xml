@@ -40,7 +40,10 @@
 
     <!-- Επικοινωνία -->
     <string name="subject">Θέμα</string>
-    <string name="subject_description">Περιγραφή Θέματος</string>
+    <string name="text">Περιγραφή Θέματος</string>
+
+    <string name="err_msg_subject">Εισάγετε θέμα</string>
+    <string name="err_msg_text">Εισάγετε μήνυμα</string>
 
     <!-- Περιεχόμενα Μενού -->
     <string name="personal_pharmacy">Προσωπικό Φαρμακείο</string>

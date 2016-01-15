@@ -114,8 +114,8 @@ public class HelperActivity extends AppCompatActivity
             //startActivity(new Intent(getApplicationContext(), Profile.class));
             //started = true;
         } else if (id == R.id.nav_communication && !class_name.equals("Communication")) {
-            //startActivity(new Intent(getApplicationContext(), Communication.class));
-            //started = true;
+            startActivity(new Intent(getApplicationContext(), Email.class));
+            started = true;
         } else if (id == R.id.nav_share && !class_name.equals("Share")) {
             //startActivity(new Intent(getApplicationContext(), Share.class));
             //started = true;
