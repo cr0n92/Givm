@@ -9,7 +9,8 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
@@ -22,17 +23,28 @@
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/scanner" >
+            android:text="@string/scanner"
+            android:textSize="24sp"
+            android:layout_marginTop="100dp"
+            android:layout_below="@+id/tool_bar"
+            android:layout_alignLeft="@+id/button2"
+            android:layout_alignStart="@+id/button2"
+            android:layout_alignRight="@+id/button2"
+            android:layout_alignEnd="@+id/button2">
         </Button>
 
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/user_input" >
+            android:text="@string/user_input"
+            android:layout_below="@id/button1"
+            android:textSize="24sp"
+            android:layout_centerHorizontal="true"
+            android:theme="@style/MyEditTextTheme">
         </Button>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

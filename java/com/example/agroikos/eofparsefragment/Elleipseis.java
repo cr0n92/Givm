@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -44,6 +45,15 @@ public class Elleipseis extends HelperActivity
         new HttpGetTask().execute();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        Log.i("KAI ETSI 2", "" + id);
+
+        return super.onOptionsItemSelected(item);
+    }
+
     //Gia na tsekaroume pio grhgora an prepei na paroume ta dedomena apo thn SQLite
     //Alliws argei upervolika
     //Allh enallaktikh:InetAddress.getByName(host).isReachable(timeOut)->den douleuei panta kala
@@ -67,16 +77,10 @@ public class Elleipseis extends HelperActivity
 
             String URL = "http://147.102.236.84:8000/needs/";
 
+            String data = "";
+            JSONArray out = null;
 
-
-
-
-
-            String data="";
-            JSONArray out=null;
-
-
-            if (isOnline()==false){
+            if (!isOnline()){
                 try {
                     throw new IOException();
                 } catch (IOException e) {
@@ -130,15 +134,11 @@ public class Elleipseis extends HelperActivity
                         Toast.LENGTH_LONG).show();
                 //TODO na to ftiaksoume kalutera,kanei diplh douleia
 
-
                 List<Need> needs = db.getAllNeeds();
                 for (Need element : needs) {
                     mAdapter.add(element);
 
                 }
-
-
-
             }
             else {
                 try {

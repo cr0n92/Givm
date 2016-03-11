@@ -43,8 +43,8 @@ public class Inputter extends HelperActivity {
         mEditText = (EditText) findViewById(R.id.edit1);
 
         Intent intent = getIntent();
-        if (intent.hasExtra("data")) {
-            mEditText.setText(intent.getStringExtra("data"));
+        if (intent.hasExtra("barcode")) {
+            mEditText.setText(intent.getStringExtra("barcode"));
         }
     }
 

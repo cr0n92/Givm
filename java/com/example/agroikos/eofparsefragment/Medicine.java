@@ -71,6 +71,7 @@ public class Medicine {
     public static void packageIntent(Intent intent, String title,
                                      String quantity, String date) {
 
+        intent.putExtra("outputter", "new_med");
         intent.putExtra(Medicine.TITLE, title);
         intent.putExtra(Medicine.QUANTITY, quantity);
         intent.putExtra(Medicine.DATE, date);

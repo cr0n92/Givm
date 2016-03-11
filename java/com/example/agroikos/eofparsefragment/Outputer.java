@@ -3,6 +3,7 @@ package com.example.agroikos.eofparsefragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -10,7 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Outputer extends HelperActivity {
-    private EditText mEditText1, mEditText2, mEditText3;
+    private EditText mEditText1, mEditText2;
+    private CheckBox mCheckBox;
     private String sclearName = "", date = "";
 
     @Override
@@ -33,7 +35,7 @@ public class Outputer extends HelperActivity {
         mEditText1.setText(date);
         mEditText2 = (EditText) findViewById(R.id.textView2_outputer);
         mEditText2.setText(name);
-        mEditText3 = (EditText) findViewById(R.id.textView3_outputer);
+        mCheckBox = (CheckBox) findViewById(R.id.opend);
     }
 
     @Override
@@ -45,35 +47,22 @@ public class Outputer extends HelperActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_tick) {
-            String code = "";
-            code = mEditText3.getText().toString();
+            boolean checked = mCheckBox.isChecked();
+            String is_it = (checked)?"2":"1";
+            //Farmakeio.newMed = new Medicine(sclearName, date, quantity);
+            //Farmakeio.mAdapter.add(Farmakeio.newMed);
 
-            if (code.trim().equals("")) {
-                Toast.makeText(getApplicationContext(), "Βάλε κανα ψιλό",
-                        Toast.LENGTH_LONG).show();
-            }
-            else {
-                mEditText3.setError(null);
+            Intent showItemIntent = new Intent(getApplicationContext(), Farmakeio.class);
+            Medicine.packageIntent(showItemIntent ,sclearName, is_it, date);
 
-                String quantity = (String) (mEditText3.getText().toString());
-                //Farmakeio.newMed = new Medicine(sclearName, date, quantity);
+            //If set, and the activity being launched is already running in the current task, then instead of
+            // launching a new instance of that activity, all of the other activities on top of it will be closed and
+            // this Intent will be delivered to the (now on top) old activity as a new Intent.
+            showItemIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            //If set, the activity will not be launched if it is already running at the top of the history stack.
+            showItemIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-
-
-                //Farmakeio.mAdapter.add(Farmakeio.newMed);
-
-                Intent showItemIntent = new Intent(getApplicationContext(), Farmakeio.class);
-                Medicine.packageIntent(showItemIntent ,sclearName,quantity,date);
-
-                //If set, and the activity being launched is already running in the current task, then instead of
-                // launching a new instance of that activity, all of the other activities on top of it will be closed and
-                // this Intent will be delivered to the (now on top) old activity as a new Intent.
-                showItemIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //If set, the activity will not be launched if it is already running at the top of the history stack.
-                showItemIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-                startActivity(showItemIntent);
-            }
+            startActivity(showItemIntent);
         }
 
         return super.onOptionsItemSelected(item);

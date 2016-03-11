@@ -1,14 +1,15 @@
 package com.example.agroikos.eofparsefragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import google.zxing.integration.android.IntentIntegrator;
-import google.zxing.integration.android.IntentResult;
 
 public class TwoButtons extends HelperActivity
 {
@@ -24,8 +25,15 @@ public class TwoButtons extends HelperActivity
 
             @Override
             public void onClick(View v) {
-                IntentIntegrator scanIntegrator = new IntentIntegrator(TwoButtons.this);
-                scanIntegrator.initiateScan();
+                PackageManager pm = getApplicationContext().getPackageManager();
+
+                // if device support camera?
+                if (!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA))
+                    Toast.makeText(getApplicationContext(), "Device has no camera!", Toast.LENGTH_SHORT).show();
+                else {
+                    Intent intent = new Intent(getApplicationContext(), BarcodeScanner.class);
+                    startActivityForResult(intent, 1);
+                }
             }
         });
 
@@ -34,7 +42,7 @@ public class TwoButtons extends HelperActivity
 
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(TwoButtons.this, Inputter.class);
+                Intent myIntent = new Intent(getApplicationContext(), Inputter.class);
                 startActivity(myIntent);
             }
         });
@@ -45,21 +53,26 @@ public class TwoButtons extends HelperActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        Log.i("KAI ETSI", ""+id);
+
         return super.onOptionsItemSelected(item);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanningResult.getContents() != null) {
-            String scanContent = scanningResult.getContents();
-            Intent showItemIntent = new Intent(getApplicationContext(), Inputter.class);
-            showItemIntent.putExtra("data", scanContent);
-            startActivity(showItemIntent);
-        }
-        else{
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "No scan data received!", Toast.LENGTH_SHORT);
-            toast.show();
+
+        if(requestCode == 1)
+        {
+            String barcode = intent.getStringExtra("BARCODE");
+
+            if (barcode.equals("NULL"))
+                Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT).show();
+            else {
+                //Toast.makeText(getApplicationContext(), barcode, Toast.LENGTH_SHORT).show();
+
+                Intent showItemIntent = new Intent(getApplicationContext(), Inputter.class);
+                showItemIntent.putExtra("barcode", barcode);
+                startActivity(showItemIntent);
+            }
         }
     }
 
