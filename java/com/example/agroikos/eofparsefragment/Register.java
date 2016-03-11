@@ -1,6 +1,7 @@
 package com.example.agroikos.eofparsefragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -12,14 +13,13 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.view.View;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,6 +39,7 @@ public class Register extends AppCompatActivity {
     private TextInputLayout nameLayout, emailLayout, addressLayout, phoneLayout, dateLayout;
     private RadioGroup mSexGroup;
     private RadioButton mSexButton;
+    private PrefManager pref;
 
     ProgressDialog dialog;
 
@@ -71,6 +72,19 @@ public class Register extends AppCompatActivity {
         mUsername.addTextChangedListener(new MyTextWatcher(mUsername));
         mEmail.addTextChangedListener(new MyTextWatcher(mEmail));
         mAddress.addTextChangedListener(new MyTextWatcher(mAddress));
+
+        pref = new PrefManager(this);
+
+        // Checking for user session
+        // if user is already logged in, take him to elleipseis
+        if (pref.isLoggedIn()) {
+  //          pref.clearSession();
+            Intent intent = new Intent(Register.this, Elleipseis.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+            finish();
+        }
     }
 
     @Override
@@ -113,16 +127,16 @@ public class Register extends AppCompatActivity {
         }
     }
 
-    private class HttpGetTask extends AsyncTask<Void, Void, JSONArray> {
+    private class HttpGetTask extends AsyncTask<Void, Void, JSONObject> {
 
         private static final String TAG = "HttpGetTask";
         private int error = -1;
 
         @Override
-        protected JSONArray doInBackground(Void... arg0) {
-            String URL = "http://192.168.1.93:8000/reg/";
+        protected JSONObject doInBackground(Void... arg0) {
+            String URL = "http://147.102.236.84:8080/reg/";
             String data = "";
-            JSONArray out = null;
+            JSONObject out = new JSONObject();
 
             String request = URL;
             java.net.URL url = null;
@@ -150,12 +164,12 @@ public class Register extends AppCompatActivity {
                 wr.write(postData);
                 InputStream in = new BufferedInputStream(conn.getInputStream());
                 data = HelperActivity.readStream(in);
+                Log.e("data", data);
 
-                JSONObject obj = new JSONObject(data);
-                Log.e("kolo", obj.getString("userPhone"));
+                //JSONObject obj = new JSONObject(data);
+                //Log.e("thlefwno", obj.getString("userPhone"));
 
-            } catch (JSONException e) {
-                Log.e(TAG, "JsonException");
+
             } catch (ProtocolException e) {
                 error = 1;
                 Log.e(TAG, "ProtocolException");
@@ -164,24 +178,35 @@ public class Register extends AppCompatActivity {
                 Log.e(TAG, "MalformedURLException");
             } catch (IOException exception) {
                 error = 1;
-                Log.e(TAG, "IOException");
+                Log.e(TAG, "IOException"+exception);
             } finally {
                 if (null != conn)
                     conn.disconnect();
             }
-
+            try {
+                Log.e(TAG, "phone"+phone);
+                out.put("phone",phone);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return out;
         }
 
         @Override
-        protected void onPostExecute(JSONArray result) {
+        protected void onPostExecute(JSONObject result) {
             if (error > 0) {
-                Toast.makeText(getApplicationContext(), (error == 1) ? "No internet connection" : "Nothing to show",
+                Toast.makeText(getApplicationContext(), (error == 1) ? "skata" : "Nothing to show",
                         Toast.LENGTH_LONG).show();
             }
             else {
+                try {
+                    pref.setMobileNumber(result.get("phone").toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 //kanoume update thn vash tou kinitou me tis plhrofories
                 //kai ton stelnoume sto SMS validation
+                //apo8hkeuoume to kinhto tou xrhsth ston prefmanager
             }
 
             dialog.dismiss();
