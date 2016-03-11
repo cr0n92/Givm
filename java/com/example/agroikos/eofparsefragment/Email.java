@@ -13,8 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import google.zxing.integration.android.IntentIntegrator;
-import google.zxing.integration.android.IntentResult;
 
 public class Email extends HelperActivity {
     private EditText mEditText1, mEditText2;

@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -44,6 +45,15 @@ public class Elleipseis extends HelperActivity
         list.setAdapter(mAdapter);
 
         new HttpGetTask().execute();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        Log.i("KAI ETSI 2", "" + id);
+
+        return super.onOptionsItemSelected(item);
     }
 
     //Gia na tsekaroume pio grhgora an prepei na paroume ta dedomena apo thn SQLite
