@@ -14,16 +14,28 @@ import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.FrameLayout;
 
-public class BarcodeScanner extends Activity{
+import java.util.List;
+
+public class BarcodeScanner extends Activity {
 
     private Camera mCamera;
     private CameraPreview mPreview;
     private Handler autoFocusHandler;
+
+    private SensorManager mSensorManager;
+    private Sensor mLightSensor;
+    private float mLightQuantity;
+    private boolean hasSensor = false;
+    SensorEventListener mListener;
 
     ImageScanner scanner;
     private boolean previewing = true;
@@ -41,6 +53,16 @@ public class BarcodeScanner extends Activity{
 
         autoFocusHandler = new Handler();
         mCamera = getCameraInstance();
+
+        if (hasFlash()) {
+            mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+            if (mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null) {
+                hasSensor = true;
+
+                enableSensorAndFlash();
+            }
+        }
+
         // Instance barcode scanner
         scanner = new ImageScanner();
         scanner.setConfig(0, Config.X_DENSITY, 3);
@@ -67,10 +89,64 @@ public class BarcodeScanner extends Activity{
         return c;
     }
 
+    public boolean hasFlash() {
+        if (mCamera == null)
+            return false;
+
+        Camera.Parameters parameters = mCamera.getParameters();
+
+        if (parameters.getFlashMode() == null)
+            return false;
+
+        List<String> supportedFlashModes = parameters.getSupportedFlashModes();
+        if (supportedFlashModes == null || supportedFlashModes.isEmpty() || supportedFlashModes.size() == 1 && supportedFlashModes.get(0).equals(Camera.Parameters.FLASH_MODE_OFF))
+            return false;
+
+        return true;
+    }
+
+    private void enableSensorAndFlash() {
+        // Obtain references to the SensorManager and the Light Sensor
+        mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
+        //Implement a listener to receive updates
+        mListener = new SensorEventListener() {
+
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                mLightQuantity = event.values[0];
+                Log.i("kourampies", " " + mLightQuantity);
+
+                if (mLightQuantity < 10) {
+                    Camera.Parameters param = mCamera.getParameters();
+                    param.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                    mCamera.setParameters(param);
+                }
+                else {
+                    Camera.Parameters param = mCamera.getParameters();
+                    param.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                    mCamera.setParameters(param);
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+
+        // Register the listener with the light sensor -- choosing
+        // one of the SensorManager.SENSOR_DELAY_* constants.
+        mSensorManager.registerListener(mListener, mLightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
     private void releaseCamera()
     {
         if (mCamera != null)
         {
+            if (hasSensor)
+                mSensorManager.unregisterListener(mListener);
+
             previewing = false;
             mCamera.setPreviewCallback(null);
             mCamera.release();
@@ -97,7 +173,7 @@ public class BarcodeScanner extends Activity{
                 for (Symbol sym : syms)
                 {
                     String answer = sym.getData();
-                    //Log.i("<<<BARCODE>>>", answer);
+                    Log.i("<<<BARCODE>>>", answer);
 
                     if (!answer.startsWith("280")) {
                         Intent returnIntent = new Intent();
@@ -128,6 +204,11 @@ public class BarcodeScanner extends Activity{
                 mCamera.autoFocus(autoFocusCB);
         }
     };
+
+    public void onRestart() {
+        super.onRestart();
+        onBackPressed();
+    }
 
     public void onPause()
     {
