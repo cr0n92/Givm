@@ -1,9 +1,6 @@
 package com.example.agroikos.eofparsefragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,11 +19,16 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 
 /**
- * Created by root on 24/12/2015.
+ * Einai h klassh pou kanei extend to AppCompatActivity kai to xrhshmopoioume
+ * se ka8e activity ws voithikh gia elaxistopoihsh kwdika
+ * ylopoiei epishs to plaino menu kai synarthseis pou xrhshmopoioume
+ * se diafora activities.
  */
+
 public class HelperActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
+    public String server = "52.29.235.81:81";
 
     public int myMenu;
 

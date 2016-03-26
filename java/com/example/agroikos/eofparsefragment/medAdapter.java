@@ -20,68 +20,48 @@ public class medAdapter extends BaseAdapter {
     private final Context mContext;
 
     public medAdapter(Context context) {
-
         mContext = context;
-
     }
 
     public void add(Medicine item) {
-
         mItems.add(item);
         notifyDataSetChanged();
-
     }
 
     public void remove(Object item) {
-
         mItems.remove(item);
         notifyDataSetChanged();
-
     }
 
     // Clears the list adapter of all items.
-
     public void clear() {
-
         mItems.clear();
         notifyDataSetChanged();
-
     }
 
     // Returns the number of ToDoItems
-
     @Override
     public int getCount() {
-
         return mItems.size();
-
     }
 
     // Retrieve the number of the ToDoItem
-
     @Override
     public Object getItem(int pos) {
-
         return mItems.get(pos);
-
     }
 
     // Get the ID for the ToDoItem
     // In this case it's just the position
-
     @Override
     public long getItemId(int pos) {
-
         return pos;
-
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) { //called after setAdapter,notifyDataSetChanged
-
         // TODO - Get the current ToDoItem
         final Medicine toDoItem = (Medicine) getItem(position);
-
 
         // TODO - Inflate the View for this ToDoItem
         // from todo_item.xml
@@ -99,15 +79,16 @@ public class medAdapter extends BaseAdapter {
 
         // TODO - Display Priority in a TextView
         final TextView quantity = (TextView) itemLayout.findViewById(R.id.quantityView);
-        quantity.setText(toDoItem.getQuantity().toString());
+        quantity.setText(toDoItem.getQuantity());
 
         // TODO - Display Time and Date.
-
         final TextView dateView = (TextView) itemLayout.findViewById(R.id.dateView);
         dateView.setText(toDoItem.getDate());
 
+        final TextView barcodeView = (TextView) itemLayout.findViewById(R.id.barcodeView);
+        barcodeView.setText(toDoItem.getBarcode());
+
         // Return the View you just created
         return itemLayout;
-
     }
 }

@@ -58,6 +58,9 @@
     <!-- Eισαγωγή barcode -->
     <string name="input_hint">Εισάγετε τον κωδικό</string>
 
+    <!-- Κάμερα -->
+    <string name="camera_error">Δεν μπορέσαμε να ανοίξουμε την κάμερα!</string>
+
     <!-- Άλλα στρινγκς -->
     <string name="action_settings">Settings</string>
     <string name="action_tick">Send</string>
@@ -70,8 +73,6 @@
     <string name="scanner">Scanner</string>
     <string name="user_input">User Input</string>
     <string name="add_new_todo_item_string">Add Medicine</string>
-
-    <string name="scan">Scan</string>
 
     <string name="title_activity_user_evaluation">UserEvaluation</string>
     <string name="title_activity_registration">Εγγραφή</string>

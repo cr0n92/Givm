@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,16 +28,30 @@ import java.util.List;
 
 public class Elleipseis extends HelperActivity
 {
-
+    private final String TAG = "Ellepseis";
     public static NeedAdapter mAdapter;
     NeedHandler db = new NeedHandler(this);
 
+    private Tracker mTracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setMenu(R.menu.menu_main_simple);
         super.helperOnCreate(R.layout.eleipseis, R.string.elleipseis, false);
+
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("Share")
+                .build());
+
+        Log.i(TAG, "Setting screen name: Elleipseis");
+        mTracker.setScreenName("Image~");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         mAdapter = new NeedAdapter(getApplicationContext());
         ListView list = (ListView)findViewById(R.id.list);

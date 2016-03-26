@@ -4,35 +4,37 @@ package com.example.agroikos.eofparsefragment;
  * Created by agroikos on 22/11/2015.
  */
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Inputter extends HelperActivity {
     private EditText mEditText;
-    private String date;
-    private String name;
+    private String date, eof, name, code;
     ProgressDialog dialog;
+    AlertDialog alert;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,20 @@ public class Inputter extends HelperActivity {
         super.helperOnCreate(R.layout.input_byhand, R.string.inputter, true);
 
         mEditText = (EditText) findViewById(R.id.edit1);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Το φάρμακο έχει λήξει!")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent TedxIntent = new Intent(getApplicationContext(), Farmakeio.class);
+                        TedxIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        TedxIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(TedxIntent);
+
+                    }
+                });
+        alert = builder.create();
 
         Intent intent = getIntent();
         if (intent.hasExtra("barcode")) {
@@ -53,7 +69,7 @@ public class Inputter extends HelperActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_tick) {
-            String code = mEditText.getText().toString();
+            code = mEditText.getText().toString();
 
             if (code.length() != 12) {
                 Toast.makeText(getApplicationContext(), "Το μήκος του barcode δεν είναι έγκυρο",
@@ -73,13 +89,13 @@ public class Inputter extends HelperActivity {
 
     private class HttpGetTask extends AsyncTask<String, Void, String[]> {
 
-        private static final String TAG = "HttpGetTask";
+        private static final String TAG = "HttpGetTask_Inputer";
         private int error = -1;
 
         @Override
         protected String[] doInBackground(String... input) {
             String URL = "http://services.eof.gr/labelsearch/";
-            String[] results = new String[2];
+            String[] results = new String[3];
 
             Pattern jsess_pattern = Pattern.compile("jsessionid=([0-9a-z]*)/?");
             Pattern state_pattern = Pattern.compile("javax.faces.ViewState\" value=\"([0-9-:]*)/?");
@@ -118,10 +134,10 @@ public class Inputter extends HelperActivity {
 
                 String urlParameters =
                         "javax.faces.partial.ajax=true&javax.faces.source=dlSearch%3Aj_idt8%3Aj_idt10&" +
-                    "javax.faces.partial.execute=%40all&javax.faces.partial.render=dlSearch&" +
-                    "dlSearch%3Aj_idt8%3Aj_idt10=dlSearch%3Aj_idt8%3Aj_idt10&dlSearch%3Aj_idt8=dlSearch%3Aj_idt8&" +
-                    "dlSearch%3Aj_idt8%3AtxtLbarcode_input=" + value + "&javax.faces.ViewState=" + state +
-                    "&javax.faces.RenderKitId=PRIMEFACES_MOBILE";
+                                "javax.faces.partial.execute=%40all&javax.faces.partial.render=dlSearch&" +
+                                "dlSearch%3Aj_idt8%3Aj_idt10=dlSearch%3Aj_idt8%3Aj_idt10&dlSearch%3Aj_idt8=dlSearch%3Aj_idt8&" +
+                                "dlSearch%3Aj_idt8%3AtxtLbarcode_input=" + value + "&javax.faces.ViewState=" + state +
+                                "&javax.faces.RenderKitId=PRIMEFACES_MOBILE";
 
 //                String urlParameters =
 //                        "javax.faces.partial.ajax=true&javax.faces.source=dlSearch%3Aj_idt8%3Aj_idt10&" +
@@ -129,6 +145,7 @@ public class Inputter extends HelperActivity {
 //                        "dlSearch%3Aj_idt10%3Aj_idt14=dlSearch%3Aj_idt10%3Aj_idt14&dlSearch%3Aj_idt10=dlSearch%3Aj_idt10&" +
 //                        "dlSearch%3Aj_idt10%3AtxtLbarcode_input=" + value + "&javax.faces.ViewState=" + state +
 //                        "&javax.faces.RenderKitId=PRIMEFACES_MOBILE";
+
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 int postDataLength = postData.length;
 
@@ -149,7 +166,8 @@ public class Inputter extends HelperActivity {
 
                 Pattern brand_pattern = Pattern.compile("<span title=\"Περιγραφή συσκ.\">Περιγραφή συσκ.</span></td><td role=\"gridcell\"><span title=\"Περιγραφή συσκ.\">([^<]*)");
                 Pattern date_pattern = Pattern.compile("<span title=\"Ημ/νία λήξης\">Ημ/νία λήξης</span></td><td role=\"gridcell\"><span title=\"Ημ/νία λήξης\">([^<]*)");
-                Matcher brand, date;
+                Pattern eof_pattern = Pattern.compile("<span title=\"Barcode συσκ.\">Barcode συσκ.</span></td><td role=\"gridcell\"><span title=\"Barcode συσκ.\">([^<]*)");
+                Matcher brand, date, eof;
 
                 date = date_pattern.matcher(data2);
                 if (!date.find()) throw new Exception("wrong barcode");
@@ -158,6 +176,10 @@ public class Inputter extends HelperActivity {
                 brand = brand_pattern.matcher(data2);
                 if (!brand.find()) throw new Exception("wrong barcode");
                 results[1] = brand.group(1);
+
+                eof = eof_pattern.matcher(data2);
+                if (!eof.find()) throw new Exception("wrong barcode");
+                results[2] = eof.group(1);
 
             } catch (ProtocolException e) {
                 error = 1;
@@ -191,11 +213,36 @@ public class Inputter extends HelperActivity {
             else {
                 date = result[0];
                 name = result[1];
+                eof = result[2];
+
+                Date date1 = new Date(); // your date
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date1);
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH) + 1;
+
+                String month1 = date.substring(0, 2);
+                String year1 = date.substring(5, 9);
+                date = year1 + "-" + month1 + "-01";
+
+                int month2 = Integer.parseInt(month1);
+                int year2 = Integer.parseInt(year1);
+
+                if (year2 * 12 + month2 < year * 12 + month) {
+                    dialog.dismiss();
+                    dialog = null;
+                    alert.show();
+
+                    return;
+                }
 
                 Intent showItemIntent = new Intent(getApplicationContext(), Outputer.class);
                 showItemIntent.putExtra("name", name);
                 showItemIntent.putExtra("date", date);
+                showItemIntent.putExtra("barcode", code);
+                showItemIntent.putExtra("eofcode", eof);
                 startActivity(showItemIntent);
+
             }
 
             dialog.dismiss();

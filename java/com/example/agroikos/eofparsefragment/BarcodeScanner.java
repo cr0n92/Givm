@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -54,6 +55,12 @@ public class BarcodeScanner extends Activity {
         autoFocusHandler = new Handler();
         mCamera = getCameraInstance();
 
+        if (mCamera == null) {
+            Toast.makeText(getApplicationContext(), R.string.camera_error, Toast.LENGTH_LONG).show();
+            releaseCamera();
+            finish();
+        }
+
         if (hasFlash()) {
             mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
             if (mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null) {
@@ -76,17 +83,22 @@ public class BarcodeScanner extends Activity {
     }
 
     /** A safe way to get an instance of the Camera object. */
-    public static Camera getCameraInstance()
+    public Camera getCameraInstance()
     {
-        Camera c = null;
-        try
-        {
-            c = Camera.open();
-        } catch (Exception e)
-        {
-            //nada
+        Camera camera = null;
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
+            Camera.getCameraInfo(i, info);
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                try {
+                    camera = Camera.open(i);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    //  throws runtime exception :"Failed to connect to camera service"
+                }
+            }
         }
-        return c;
+        return camera;
     }
 
     public boolean hasFlash() {
@@ -115,7 +127,7 @@ public class BarcodeScanner extends Activity {
             @Override
             public void onSensorChanged(SensorEvent event) {
                 mLightQuantity = event.values[0];
-                Log.i("kourampies", " " + mLightQuantity);
+                Log.i("Light Mesurment: ", " " + mLightQuantity);
 
                 if (mLightQuantity < 10) {
                     Camera.Parameters param = mCamera.getParameters();
